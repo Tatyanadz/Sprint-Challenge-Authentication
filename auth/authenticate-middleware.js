@@ -3,6 +3,29 @@
   before granting access to the next middleware/route handler
 */
 
+// module.exports = (req, res, next) => {
+//   res.status(401).json({ you: 'shall not pass!' });
+// };
+
+const jwt = require("jsonwebtoken")
+const private = require("../config/private")
+
 module.exports = (req, res, next) => {
-  res.status(401).json({ you: 'shall not pass!' });
-};
+  const token = req.headers.authorization
+  if (token) {
+    jwt.verify(token, private.jwtPrivate, (err, decodedJwt) => {
+      if (err) {
+        res.status(401).json({
+          message: "You shall not pass"
+        })
+      } else {
+        req.decodedJwt = decodedJwt
+        next()
+      }
+    })
+  } else {
+    res.status(401).json({
+      you: "shall not pass!"
+    })
+  }
+}
