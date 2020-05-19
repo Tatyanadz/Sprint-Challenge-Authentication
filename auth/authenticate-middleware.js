@@ -8,12 +8,12 @@
 // };
 
 const jwt = require("jsonwebtoken")
-const private = require("../config/private")
+const priv = require("../config/private")
 
 module.exports = (req, res, next) => {
   const token = req.headers.authorization
   if (token) {
-    jwt.verify(token, private.jwtPrivate, (err, decodedJwt) => {
+    jwt.verify(token, priv.jwtPrivate, (err, decodedJwt) => {
       if (err) {
         res.status(401).json({
           message: "You shall not pass"

@@ -2,10 +2,11 @@ const request = require("supertest")
 const server = require("../api/server")
 const db = require("../database/dbConfig")
 
+beforeEach(async () => {
+  await db("users").truncate()
+});
 describe("POST /register", () => {
-  beforeEach(async () => {
-    await db("users").truncate()
-  });
+  
   it("201", async () => {
     const res = await request(server)
       .post("/api/auth/register")
@@ -25,7 +26,7 @@ describe("POST /login", () => {
     const res = await request(server)
       .post("/api/auth/login")
       .send({ username: "tatyana", password: "123abc" });
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(401);
   });
   it("object", async () => {
     const res = await request(server)
